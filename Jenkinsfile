@@ -39,4 +39,16 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'good', message: "Build succeeded: ${env.BUILD_URL}")
+        }
+        failure {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'danger', message: "Build failed: ${env.BUILD_URL}")
+        }
+        unstable {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'warning', message: "Build is unstable: ${env.BUILD_URL}")
+        }
+    }
 }
