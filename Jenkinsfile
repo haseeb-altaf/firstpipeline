@@ -22,9 +22,6 @@ pipeline {
         }
 
         stage('Docker Build') {
-            when {
-                expression { return !env.CHANGE_ID } // Only run on push events, not PRs
-            }
             steps {
                 script {
                     docker.build(DOCKER_IMAGE)
@@ -33,9 +30,6 @@ pipeline {
         }
 
         stage('Docker Push') {
-            when {
-                expression { return !env.CHANGE_ID } // Only run on push events, not PRs
-            }
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
