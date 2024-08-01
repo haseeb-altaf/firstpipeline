@@ -47,7 +47,6 @@ pipeline {
     }
 
     post {
-        post {
         always {
             slackSend(channel: '#pipeline', color: 'good', message: "Pipeline finished for ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})")
         }
