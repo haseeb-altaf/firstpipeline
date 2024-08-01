@@ -47,11 +47,14 @@ pipeline {
     }
 
     post {
+        post {
+        always {
+            slackSend(channel: '#pipeline', color: 'good', message: "Pipeline finished for ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})")
+        }
         success {
-            slackSend(channel: SLACK_CHANNEL, message: "Pipeline succeeded for ${env.JOB_NAME} ${env.BUILD_NUMBER}", credentialsId: SLACK_CREDENTIALS_ID)
+            slackSend(channel: '#pipeline', color: 'good', message: "Pipeline succeeded for ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})")
         }
         failure {
-            slackSend(channel: SLACK_CHANNEL, message: "Pipeline failed for ${env.JOB_NAME} ${env.BUILD_NUMBER}", credentialsId: SLACK_CREDENTIALS_ID)
-        }
+            slackSend(channel: '#pipeline', color: 'danger', message: "Pipeline failed for ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BUILD_URL})")
     }
 }
