@@ -38,20 +38,11 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         docker.image(DOCKER_IMAGE).push('latest')
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            slackSend(channel: SLACK_CHANNEL, message: "Pipeline succeeded for ${env.JOB_NAME} ${env.BUILD_NUMBER}", credentialsId: SLACK_CREDENTIALS_ID)
-        }
-        failure {
-            slackSend(channel: SLACK_CHANNEL, message: "Pipeline failed for ${env.JOB_NAME} ${env.BUILD_NUMBER}", credentialsId: SLACK_CREDENTIALS_ID)
         }
     }
 }
