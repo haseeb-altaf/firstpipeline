@@ -11,17 +11,14 @@ pipeline {
     stages {
         stage('Build') {
             when {
-                anyOf {
-                    branch 'develop'
-                    changeset '*'
-                }
+                branch 'develop'
             }
             steps {
                 script {
                     if (env.CHANGE_ID) {
-                        echo 'This is a Pull Request build'
+                        echo 'This is a Pull Request build for the develop branch'
                     } else {
-                        echo 'This is a push build'
+                        echo 'This is a push build to the develop branch'
                     }
                 }
             }
@@ -29,10 +26,7 @@ pipeline {
 
         stage('Docker Build') {
             when {
-                anyOf {
-                    branch 'develop'
-                    changeset '*'
-                }
+                branch 'develop'
             }
             steps {
                 script {
