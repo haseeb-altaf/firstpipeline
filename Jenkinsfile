@@ -4,12 +4,18 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'haseeb497/techworld-demo-app'
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        SLACK_CREDENTIALS_ID = 'slack-creds' 
+        SLACK_CREDENTIALS_ID = 'slack-creds'
         SLACK_CHANNEL = '#pipeline'
     }
 
     stages {
         stage('Build') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    changeset '*'
+                }
+            }
             steps {
                 script {
                     if (env.CHANGE_ID) {
@@ -23,7 +29,10 @@ pipeline {
 
         stage('Docker Build') {
             when {
-                expression { return !env.CHANGE_ID } // Only run on push events, not PRs
+                anyOf {
+                    branch 'develop'
+                    changeset '*'
+                }
             }
             steps {
                 script {
@@ -34,7 +43,7 @@ pipeline {
 
         stage('Docker Push') {
             when {
-                expression { return !env.CHANGE_ID } // Only run on push events, not PRs
+                branch 'develop'
             }
             steps {
                 script {
@@ -43,6 +52,18 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'good', message: "Build succeeded: ${env.BUILD_URL}")
+        }
+        failure {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'danger', message: "Build failed: ${env.BUILD_URL}")
+        }
+        unstable {
+            slackSend(channel: "${env.SLACK_CHANNEL}", color: 'warning', message: "Build is unstable: ${env.BUILD_URL}")
         }
     }
 }
