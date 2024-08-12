@@ -1,0 +1,36 @@
+Grep:
+Search for pattern in files.
+For example 
+grep 'dummy' new.txt
+grep -r 'dummy' Downloads/
+grep -n 'dummy' new.txt
+grep -E 'dummy' new.txt
+
+
+awk:
+A powerful text processing language.
+For example
+awk '{print $2}' new.txt
+
+
+sed:
+Sed is a stream editor for filtering and transforming the files.
+For example
+sed 's/dummy/duuuummmy/g' new.txt
+
+
+Find:
+Find files in a directory.
+For example
+find Download/ -name new.txt
+find Download/ -mtime -7
+
+
+xargs:
+Is a command that takes input from another command and converts it into arguments.
+For example
+touch new
+ls new | xargs echo Hello
+
+
+
